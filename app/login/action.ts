@@ -1,16 +1,16 @@
 // login/actions.ts
 "use server";
 
-import { customLogin } from "../../utils/customLoginHandler"; // Adjust the path as necessary
+// login/actions.ts
+import { customLogin } from "../../utils/customLoginHandler";
 import { redirect } from "next/navigation";
-
 export async function loginAction(prevData: any, formData: FormData) {
   const res = await customLogin(formData);
 
   if (res.error) {
     console.error("Login Error:", res.error);
-    return res; // Handle the error appropriately, possibly returning it to the frontend
+    return res;
   }
 
-  redirect("/my-account"); // Redirect upon successful login
+  redirect("/my-account");
 }

@@ -4,17 +4,18 @@ import { onLogin } from "@faustwp/experimental-app-router";
 export async function customLogin(
   formData: FormData
 ): Promise<{ error?: string; message?: string }> {
-  if (!process.env.NEXT_PUBLIC_WORDPRESS_URL) {
-    console.error(
-      "WordPress URL is not set. Please configure environment variables."
-    );
-    return { error: "Configuration error: WordPress URL is not set." };
+  // Safely retrieve the environment variable with a fallback URL
+  const wordpressUrl =
+    process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://default-url.com";
+
+  console.log("Using WordPress URL:", wordpressUrl);
+
+  try {
+    // Assuming onLogin uses the environment variable directly, or you need to adjust this part to pass the URL correctly
+    const result = await onLogin(formData);
+    return result;
+  } catch (error) {
+    console.error("Error in onLogin:", error);
+    return { error: "Login failed due to an internal error." };
   }
-
-  const apiUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/api/faust/token`;
-  console.log("Using WordPress URL:", apiUrl);
-
-  // Your existing logic here
-  const result = await onLogin(formData);
-  return result;
 }
